@@ -1,0 +1,229 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+
+  --font-display: "Bricolage Grotesque", "Inter Tight", system-ui, sans-serif;
+  --font-body: "Inter Tight", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-flash: var(--flash);
+  --color-flash-glow: var(--flash-glow);
+  --color-ink: var(--ink);
+
+  --shadow-flash: 0 20px 60px -20px color-mix(in oklab, var(--flash) 60%, transparent);
+  --shadow-glow: 0 0 80px color-mix(in oklab, var(--flash) 40%, transparent);
+  --shadow-card:
+    0 1px 0 0 color-mix(in oklab, white 6%, transparent) inset, 0 30px 60px -30px rgba(0, 0, 0, 0.7);
+}
+
+:root {
+  --radius: 0.875rem;
+
+  /* Editorial dark palette with electric crimson */
+  --background: oklch(0.14 0.01 25);
+  --foreground: oklch(0.98 0.005 60);
+  --surface: oklch(0.18 0.012 25);
+  --surface-elevated: oklch(0.22 0.015 25);
+  --ink: oklch(0.08 0.01 25);
+
+  --card: oklch(0.18 0.012 25);
+  --card-foreground: oklch(0.98 0.005 60);
+  --popover: oklch(0.18 0.012 25);
+  --popover-foreground: oklch(0.98 0.005 60);
+
+  --flash: oklch(0.66 0.245 25);
+  --flash-glow: oklch(0.74 0.21 30);
+
+  --primary: oklch(0.66 0.245 25);
+  --primary-foreground: oklch(0.99 0.005 60);
+  --secondary: oklch(0.24 0.015 25);
+  --secondary-foreground: oklch(0.98 0.005 60);
+  --muted: oklch(0.22 0.012 25);
+  --muted-foreground: oklch(0.68 0.02 30);
+  --accent: oklch(0.85 0.18 95); /* amber accent */
+  --accent-foreground: oklch(0.14 0.01 25);
+  --destructive: oklch(0.6 0.22 25);
+  --destructive-foreground: oklch(0.99 0.005 60);
+  --border: oklch(0.28 0.015 25);
+  --input: oklch(0.24 0.015 25);
+  --ring: oklch(0.66 0.245 25);
+}
+
+.dark {
+  --background: oklch(0.14 0.01 25);
+  --foreground: oklch(0.98 0.005 60);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html {
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-body);
+    background-image:
+      radial-gradient(
+        ellipse at top right,
+        color-mix(in oklab, var(--flash) 18%, transparent),
+        transparent 55%
+      ),
+      radial-gradient(
+        ellipse at bottom left,
+        color-mix(in oklab, var(--flash) 8%, transparent),
+        transparent 60%
+      );
+    background-attachment: scroll;
+    will-change: auto;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    font-weight: 600;
+  }
+  ::selection {
+    background-color: var(--flash);
+    color: var(--primary-foreground);
+  }
+
+  /* Fix native browser date/time picker icons on dark background */
+  input[type="date"]::-webkit-calendar-picker-indicator,
+  input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(1) opacity(0.7);
+    cursor: pointer;
+  }
+
+  /* Completely hide all Lovable white-label badges/logos */
+  div[id^="lovable"],
+  lovable-badge,
+  .lovable-badge,
+  [class*="lovable"] {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+  .font-mono {
+    font-family: var(--font-mono);
+  }
+
+  .text-flash {
+    color: var(--flash);
+  }
+  .bg-flash {
+    background-color: var(--flash);
+  }
+  .bg-surface {
+    background-color: var(--surface);
+  }
+  .bg-surface-elevated {
+    background-color: var(--surface-elevated);
+  }
+  .border-flash {
+    border-color: var(--flash);
+  }
+
+  .gradient-flash {
+    background-image: linear-gradient(135deg, var(--flash) 0%, var(--flash-glow) 100%);
+  }
+  .gradient-text-flash {
+    background: linear-gradient(180deg, var(--flash-glow), var(--flash));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .grid-noise {
+    background-image:
+      linear-gradient(to right, color-mix(in oklab, white 4%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, white 4%, transparent) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  .shadow-flash {
+    box-shadow: var(--shadow-flash);
+  }
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  .marquee {
+    animation: marquee 40s linear infinite;
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+  @keyframes marquee {
+    from {
+      transform: translateX(0) translateZ(0);
+    }
+    to {
+      transform: translateX(-50%) translateZ(0);
+    }
+  }
+
+  .pulse-flash {
+    animation: pulse-flash 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse-flash {
+    0%,
+    100% {
+      opacity: 1;
+      box-shadow: 0 0 0 0 color-mix(in oklab, var(--flash) 60%, transparent);
+    }
+    50% {
+      opacity: 0.85;
+      box-shadow: 0 0 0 16px color-mix(in oklab, var(--flash) 0%, transparent);
+    }
+  }
+
+  .clip-arrow {
+    clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%);
+  }
+}
