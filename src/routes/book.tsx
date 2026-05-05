@@ -26,16 +26,16 @@ export const Route = createFileRoute("/book")({
 
 /* ─── Zod Validation Schema ─── */
 const formSchema = z.object({
-  name: z.string().min(2, "Name is required"),
-  phone: z.string().min(5, "Phone is required"),
-  email: z.string().email("Please enter a valid email"),
-  vertical: z.string().min(1, "Event type is required"),
-  pkg: z.string().min(1, "Plan is required"),
-  date: z.string().min(1, "Date is required"),
-  time: z.string().min(1, "Start time is required"),
-  endTime: z.string().optional(),
-  address: z.string().min(5, "Address is required"),
-  notes: z.string().optional(),
+  name: z.string().trim().min(2, "Name is required"),
+  phone: z.string().trim().min(5, "Phone is required"),
+  email: z.string().trim().email("Please enter a valid email"),
+  vertical: z.string().trim().min(1, "Event type is required"),
+  pkg: z.string().trim().min(1, "Plan is required"),
+  date: z.string().trim().min(1, "Date is required"),
+  time: z.string().trim().min(1, "Start time is required"),
+  endTime: z.string().trim().optional(),
+  address: z.string().trim().min(5, "Address is required"),
+  notes: z.string().trim().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -58,6 +58,7 @@ function BookPage() {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -98,8 +99,12 @@ function BookPage() {
         status: "Pending",
       };
       
-      const existing = JSON.parse(localStorage.getItem("flashshot_bookings") || "[]");
-      localStorage.setItem("flashshot_bookings", JSON.stringify([...existing, booking]));
+      const rawBookings = localStorage.getItem("flashshot_bookings");
+      const existing = rawBookings ? JSON.parse(rawBookings) : [];
+      const existingBookings = Array.isArray(existing) ? existing : [];
+
+      localStorage.setItem("flashshot_bookings", JSON.stringify([...existingBookings, booking]));
+      reset();
       setIsSubmitted(true);
     } catch {
       toast.error("Something went wrong. Please try again.");
@@ -143,7 +148,10 @@ function BookPage() {
             </Button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit(onSubmit)} className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-3">
+          <form
+            onSubmit={handleSubmit(onSubmit, () => toast.error("Please fix the highlighted fields and try again."))}
+            className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-3"
+          >
 
             {/* ── Form card ── */}
             <div className="lg:col-span-2">
