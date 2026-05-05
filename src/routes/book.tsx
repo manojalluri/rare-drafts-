@@ -114,7 +114,9 @@ function BookPage() {
   };
 
   const selectedPkg = packages.find((p) => p.name === watchedPkg) || packages[1];
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+    .toISOString()
+    .split("T")[0];
 
   return (
     <div className="min-h-screen">
@@ -151,6 +153,7 @@ function BookPage() {
           <form
             onSubmit={handleSubmit(onSubmit, () => toast.error("Please fix the highlighted fields and try again."))}
             className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-3"
+            noValidate
           >
 
             {/* ── Form card ── */}
